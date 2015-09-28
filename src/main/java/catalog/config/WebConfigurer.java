@@ -12,7 +12,7 @@ public class WebConfigurer extends WebMvcConfigurerAdapter{
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
-		String ANGULARJS_LOCATION = "file:///C:/Users/Julian/Codes/Projects/webapp_catalog";
+		String ANGULARJS_LOCATION = "file:///C:/Users/Julian/Codes/Projects/webapp_catalog/app/";
 		registry.addResourceHandler("/**").addResourceLocations(ANGULARJS_LOCATION);
 	}
 	
