@@ -14,10 +14,6 @@ public class App {
 	private final static Logger log = Logger.getLogger(App.class.getName());
 
     public static void main(String[] args) {
-    	CategoryManager cm = new CategoryManager();
-    	Category c = cm.findCategory((long)1);
-    	if (c == null)
-    		cm.addCategory("Test");
         SpringApplication.run(App.class, args);
     }
 }
