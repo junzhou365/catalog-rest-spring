@@ -1,21 +1,30 @@
 package catalog.domain;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 import catalog.domain.HibernateUtil;
 import catalog.domain.Item;
 
-public class ItemManager {
-	public void addItem(Item item) {
+public class ItemManager {	
+	public Item updateItem(Item item, Long cId, boolean update) {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
-        session.save(item);
+        Category category = (Category) session.load(Category.class, cId);
+        item.setDatetime(new Date());
+        item.setCategory(category);
+        if (update)
+        	session.update(item);
+        else
+        	session.save(item);
         session.getTransaction().commit();
+        return item;
 	}
 	
-    public Item findItem(Long id) {
+    public Item getItem(Long id) {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         Item item = (Item) session.get(Item.class, id);
@@ -30,27 +39,16 @@ public class ItemManager {
     	if (item != null) {
     		session.delete(item);
     		session.flush();
-    		session.getTransaction().commit();
-    		
     	}
-    }
-
-    @SuppressWarnings("rawtypes")
-	private List listItems() {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        List result = session.createQuery("from Item").list();
-        session.getTransaction().commit();
-        return result;
+    	session.getTransaction().commit();
     }
     
-    @SuppressWarnings("rawtypes")
-	public void listAll() {
-    	List items = listItems();
-    	for (int i = 0; i < items.size(); i++) {
-    		Item item = (Item) items.get(i);
-    		System.out.println("Item id:" + 
-    				item.getId() + " " + item.getTitle() + " " + item.getText() + " " + item.getDatetime());
-    	}
+	public List<Item> getItems(Long cId) {
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        @SuppressWarnings("unchecked")
+		List<Item> result = session.createCriteria(Item.class).add(Restrictions.eq("category.id", cId)).list();
+        session.getTransaction().commit();
+        return result;
     }
 }

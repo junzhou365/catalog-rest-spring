@@ -15,13 +15,14 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 @RestController
+@RequestMapping(value="/api")
 public class CatalogController {
 	private CategoryManager cmng = new CategoryManager();
 	final Logger log = Logger.getLogger(CatalogController.class.getName());
 	
 	@RequestMapping(value="/categories/{id}", method=RequestMethod.GET)
 	public Category getCategory(@PathVariable Long id) {
-		Category category = cmng.findCategory(id);
+		Category category = cmng.getCategory(id);
 		log.debug(category.getDatetime());
 		return category;
 	}
@@ -34,15 +35,12 @@ public class CatalogController {
 	
 	@RequestMapping(value="/categories", method=RequestMethod.POST)
 	public Category createCategory(@RequestBody Category category) {
-		Category newCategory = cmng.createCategory(category.getName());
-		return newCategory;
+		return cmng.updateCategory(category, false);
 	}
 	
 	@RequestMapping(value="/categories/{id}", method=RequestMethod.PUT)
 	public Category updateCategory(@RequestBody Category category) {
-		category.setDatetime(new Date());
-		Category updatedCategory = cmng.updateCategory(category);
-		return updatedCategory;
+		return cmng.updateCategory(category, true);
 	}
 	
 	@RequestMapping(value="/categories/{id}", method=RequestMethod.DELETE)

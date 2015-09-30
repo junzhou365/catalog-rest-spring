@@ -1,15 +1,18 @@
 package catalog.domain;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import catalog.domain.Category;
 import catalog.domain.HibernateUtil;
 
 public class CategoryManager {
 	
-    public Category findCategory(Long id) {
+    public Category getCategory(Long id) {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         Category category = (Category) session.get(Category.class, id);
@@ -17,19 +20,14 @@ public class CategoryManager {
         return category;
     }
     
-    public Category createCategory(String name) {
-    	Category category = new Category(name);
+    public Category updateCategory(Category category, boolean update) {
+    	category.setDatetime(new Date());
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
-        session.save(category);
-        session.getTransaction().commit();
-        return category;
-    }
-
-    public Category updateCategory(Category category) {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        session.update(category);
+        if (update)
+        	session.update(category);
+        else
+        	session.save(category);
         session.getTransaction().commit();
         return category;
     }
@@ -42,8 +40,8 @@ public class CategoryManager {
     	if (category != null) {
     		session.delete(category);
     		session.flush();
-    		session.getTransaction().commit();
     	}
+    	session.getTransaction().commit();
     }
 
 	public List<Category> getAllCategories() {

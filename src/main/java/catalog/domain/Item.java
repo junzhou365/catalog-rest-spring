@@ -17,6 +17,8 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="ITEMS")
 public class Item {
@@ -31,10 +33,11 @@ public class Item {
 	private String text;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
+	@JsonIgnore
 	@JoinColumn(name="categoryId", nullable=false)
-	private Category category = null;
+	private Category category;
 	
-	@OneToOne(fetch=FetchType.LAZY)
+	@OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="imageId")
 	private Image image;
 	
