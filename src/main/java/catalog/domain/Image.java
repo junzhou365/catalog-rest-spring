@@ -11,6 +11,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -28,7 +30,7 @@ public class Image {
 	private Date datetime;
 	
 	@OneToOne(mappedBy="image")
-	private Item item = null;
+	private Item item;
 	
 	public Image() {}
 	
@@ -36,6 +38,13 @@ public class Image {
 		this.title = title;
 		this.path = path;
 		this.datetime = new Date();
+	}
+	
+	public Image(Image oldImage) {
+		this.title = oldImage.title;
+		this.path = oldImage.path;
+		this.datetime = new Date();
+		this.item = oldImage.item;
 	}
 	
 	public Long getId() {
@@ -62,5 +71,11 @@ public class Image {
 		this.path = path;
 	}
 	
-	
+    public Date getDatetime() {
+		return datetime;
+    }
+    
+    public void setDatetime(Date datetime) {
+    	this.datetime = datetime;
+    }
 }

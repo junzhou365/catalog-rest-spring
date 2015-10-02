@@ -9,11 +9,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 public class WebConfigurer extends WebMvcConfigurerAdapter{
 	private final static Logger log = Logger.getLogger(WebConfigurer.class.getName());
+	public final static String imageFolerPath = "C:/Users/Julian/Codes/Projects/public_images/";
+	public final static String imageResourcePath = "file:///C:/Users/Julian/Codes/Projects/public_images/";
+	public final static String ANGULARJS_LOCATION = "file:///C:/Users/Julian/Codes/Projects/webapp_catalog/app/";
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
-		String ANGULARJS_LOCATION = "file:///C:/Users/Julian/Codes/Projects/webapp_catalog/app/";
+		
 		registry.addResourceHandler("/**").addResourceLocations(ANGULARJS_LOCATION);
+		registry.addResourceHandler("/images/**").addResourceLocations(imageResourcePath);
 	}
 	
 	@Override

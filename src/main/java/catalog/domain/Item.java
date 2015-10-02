@@ -34,11 +34,11 @@ public class Item {
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JsonIgnore
-	@JoinColumn(name="categoryId", nullable=false)
+	@JoinColumn(name="CATEGORY_ID", nullable=false)
 	private Category category;
 	
 	@OneToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="imageId")
+	@JoinColumn(name="IMAGE_ID")
 	private Image image;
 	
 	@Temporal(TemporalType.TIMESTAMP)
@@ -51,6 +51,15 @@ public class Item {
 		this.text = text;
 		this.datetime = new Date();
 	}
+	
+	public Item(Item oldItem) {
+		this.title = oldItem.title;
+		this.text = oldItem.text;
+		this.datetime = new Date();
+		this.category = oldItem.category;
+		this.image = oldItem.image;
+	}
+	
 	public Long getId() {
 		return id;
 	}

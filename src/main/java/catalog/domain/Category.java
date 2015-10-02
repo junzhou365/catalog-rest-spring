@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -23,7 +23,8 @@ public class Category {
 	@Id
 	@GeneratedValue(generator="increment")
 	@GenericGenerator(name="increment", strategy = "increment")
-	private Long categoryId;
+	@Column(name="CATEGORY_ID")
+	private Long id;
 	private String name;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date datetime;
@@ -40,11 +41,11 @@ public class Category {
 	}
 	
 	public Long getId() {
-		return categoryId;
+		return id;
 	}
 	
-	public void setId(Long categoryId) {
-		this.categoryId = categoryId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	public String getName() {
