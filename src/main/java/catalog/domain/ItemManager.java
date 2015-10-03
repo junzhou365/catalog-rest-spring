@@ -13,11 +13,11 @@ import catalog.domain.Item;
 public class ItemManager {
 	private final static Logger log = Logger.getLogger(ItemManager.class.getName());
 	private ImageManager immng = new ImageManager();
-	
+
 	public Item updateItem(Item item, Long cId, boolean update) {
 		// Input like
 		// {image: Object, title: "asdf", text: "asdf"}$promise: undefined$resolved: truedatetime: nullid: nullimage: Objecttext: "asdf"title: "asdf"__proto__: Resource
-		
+
 		if (item.getImage().getPath() == null)
 			item.setImage(null);
 		else
@@ -32,8 +32,8 @@ public class ItemManager {
         if (item.getImage() != null)
         	item.getImage().getId();
         Item changedItem = item;
-        
-        if (update) 
+
+        if (update)
         	session.update(changedItem);
         else {
         	changedItem = new Item(item);
@@ -42,7 +42,7 @@ public class ItemManager {
         session.getTransaction().commit();
         return changedItem;
 	}
-	
+
     public Item getItem(Long id) {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
@@ -51,7 +51,7 @@ public class ItemManager {
         session.getTransaction().commit();
         return item;
     }
-    
+
     public void deleteItem(Long id) {
     	Session session = HibernateUtil.getSessionFactory().getCurrentSession();
     	session.beginTransaction();
@@ -62,7 +62,7 @@ public class ItemManager {
     	}
     	session.getTransaction().commit();
     }
-    
+
 	public List<Item> getItems(Long cId) {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
@@ -70,6 +70,7 @@ public class ItemManager {
 		List<Item> result = session.createCriteria(Item.class).add(Restrictions.eq("category.id", cId)).list();
         for (Item item : result) {
         	Hibernate.initialize(item.getImage());
+					Hibernate.initialize(item.getCategory());
         }
         session.getTransaction().commit();
         return result;
