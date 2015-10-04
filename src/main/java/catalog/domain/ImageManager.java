@@ -68,7 +68,7 @@ public class ImageManager {
     	String filename = null;
     	String filePath = null;
     	try {
-    		filePath = image.getTitle() + "_" + new SimpleDateFormat("yyyy_MM_dd").format(image.getDatetime()) + "." + extension;
+    		filePath = image.getTitle() + "." + extension;
     		filename = imageFolerPath + filePath;
 			downloadFromUrl(url, filename);
 		} catch (IOException e) {

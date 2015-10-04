@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import catalog.domain.HibernateUtil;
@@ -27,8 +28,7 @@ public class ItemManager {
         session.beginTransaction();
         // no category in json, so we need to maintain relation manually
         // We have to get image from database again to maintain chain
-        Category category = (Category) session.load(Category.class, cId);
-        item.setCategory(category);
+        Hibernate.initialize(item.getCategory());
         if (item.getImage() != null)
         	item.getImage().getId();
         Item changedItem = item;
@@ -68,6 +68,23 @@ public class ItemManager {
         session.beginTransaction();
         @SuppressWarnings("unchecked")
 		List<Item> result = session.createCriteria(Item.class).add(Restrictions.eq("category.id", cId)).list();
+        for (Item item : result) {
+        	Hibernate.initialize(item.getImage());
+					Hibernate.initialize(item.getCategory());
+        }
+        session.getTransaction().commit();
+        return result;
+    }
+	
+	public List<Item> getLatestItems() {
+		//Output will be limited to 12 items
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        @SuppressWarnings("unchecked")
+		List<Item> result = session.createCriteria(Item.class)
+							.addOrder(Order.desc("datetime"))
+							.setMaxResults(12)
+							.list();
         for (Item item : result) {
         	Hibernate.initialize(item.getImage());
 					Hibernate.initialize(item.getCategory());

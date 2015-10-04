@@ -48,4 +48,9 @@ public class ItemController {
 	public void deleteItem(@PathVariable Long iId) {
 		imng.deleteItem(iId);
 	}
+	
+	@RequestMapping(value="/getLatestItems", method=RequestMethod.GET)
+	public List<Item> getLatestItems() {
+		return imng.getLatestItems();
+	}
 }
