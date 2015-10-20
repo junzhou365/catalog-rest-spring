@@ -36,21 +36,14 @@ public class DatabaseConfig {
 		return factory;
     }
 //	
-	private Properties getHibernateProperties() {
-        Properties prop = new Properties();
-        prop.put("hibernate.format_sql", "true");
-        prop.put("hibernate.show_sql", "true");
-        prop.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-        return prop;
-    }
 
-	@Bean
-	public DriverManagerDataSource dataSource() {
-	    DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
-	    driverManagerDataSource.setDriverClassName("org.postgresql.Driver");
-	    driverManagerDataSource.setUrl("jdbc:postgresql://localhost:5432/testdb");
-	    driverManagerDataSource.setUsername("Julian");
-	    driverManagerDataSource.setPassword("juls");
-	    return driverManagerDataSource;
-	}		
+//	@Bean
+//	public DriverManagerDataSource dataSource() {
+//	    DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
+//	    driverManagerDataSource.setDriverClassName("org.postgresql.Driver");
+//	    driverManagerDataSource.setUrl("jdbc:postgresql://localhost:5432/testdb");
+//	    driverManagerDataSource.setUsername("Julian");
+//	    driverManagerDataSource.setPassword("juls");
+//	    return driverManagerDataSource;
+//	}		
 }
