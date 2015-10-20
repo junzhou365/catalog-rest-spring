@@ -18,32 +18,22 @@ public class DatabaseConfig {
 
 	@Bean
     public SessionFactory sessionFactory() {
-//        final MySessionImpl factory = new MySessionImpl();
-//        factory.setDataSource(dataSource());
-//        factory.setHibernateProperties(getHibernateProperties());
-//        return factory.getObject();
 		System.out.println("\n");
 		System.out.println("Create sessionFactory");
 		SessionFactory factory = new org.hibernate.cfg.Configuration().configure().buildSessionFactory();
 		System.out.println("Factory exists: ");
 		System.out.println(factory != null);
-//		Session session = factory.getCurrentSession();
-//        session.beginTransaction();
-//        Category category = (Category) session.get(Category.class, (long)1);
-//        session.getTransaction().commit();
-//        System.out.println(category.getName());
-//		System.out.println("\n");
 		return factory;
     }
 //	
 
-//	@Bean
-//	public DriverManagerDataSource dataSource() {
-//	    DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
-//	    driverManagerDataSource.setDriverClassName("org.postgresql.Driver");
-//	    driverManagerDataSource.setUrl("jdbc:postgresql://localhost:5432/testdb");
-//	    driverManagerDataSource.setUsername("Julian");
-//	    driverManagerDataSource.setPassword("juls");
-//	    return driverManagerDataSource;
-//	}		
+	@Bean
+	public DriverManagerDataSource dataSource() {
+	    DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
+	    driverManagerDataSource.setDriverClassName("org.postgresql.Driver");
+	    driverManagerDataSource.setUrl("jdbc:postgresql://localhost:5432/catalog2");
+	    driverManagerDataSource.setUsername("julian");
+	    driverManagerDataSource.setPassword("juls");
+	    return driverManagerDataSource;
+	}		
 }
