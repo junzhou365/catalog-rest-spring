@@ -1,12 +1,14 @@
-package catalog.domain;
+package catalog.domain.model;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -16,35 +18,26 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="IMAGES")
-public class Image {
+@Table(name="CATEGORIES")
+public class Category {
 	@Id
 	@GeneratedValue(generator="increment")
 	@GenericGenerator(name="increment", strategy = "increment")
-	@Column(name="IMAGE_ID")
+	@Column(name="CATEGORY_ID")
 	private Long id;
-	
-	private String title;
-	private String path;
+	private String name;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date datetime;
 	
-	@OneToOne(mappedBy="image")
-	private Item item;
+	@OneToMany(mappedBy="category")
+	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
+	private Set<Item> items = new HashSet<Item>(0);
 	
-	public Image() {}
+	public Category() {}
 	
-	public Image(String title, String path) {
-		this.title = title;
-		this.path = path;
+	public Category(String name) {
+		this.name = name;
 		this.datetime = new Date();
-	}
-	
-	public Image(Image oldImage) {
-		this.title = oldImage.title;
-		this.path = oldImage.path;
-		this.datetime = new Date();
-		this.item = oldImage.item;
 	}
 	
 	public Long getId() {
@@ -55,20 +48,12 @@ public class Image {
 		this.id = id;
 	}
 	
-	public String getTitle() {
-		return title;
+	public String getName() {
+		return name;
 	}
 	
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	
-	public String getPath() {
-		return path;
-	}
-	
-	public void setPath(String path) {
-		this.path = path;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
     public Date getDatetime() {

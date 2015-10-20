@@ -1,14 +1,12 @@
-package catalog.domain;
+package catalog.domain.model;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -18,26 +16,35 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="CATEGORIES")
-public class Category {
+@Table(name="IMAGES")
+public class Image {
 	@Id
 	@GeneratedValue(generator="increment")
 	@GenericGenerator(name="increment", strategy = "increment")
-	@Column(name="CATEGORY_ID")
+	@Column(name="IMAGE_ID")
 	private Long id;
-	private String name;
+	
+	private String title;
+	private String path;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date datetime;
 	
-	@OneToMany(mappedBy="category")
-	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
-	private Set<Item> items = new HashSet<Item>(0);
+	@OneToOne(mappedBy="image")
+	private Item item;
 	
-	public Category() {}
+	public Image() {}
 	
-	public Category(String name) {
-		this.name = name;
+	public Image(String title, String path) {
+		this.title = title;
+		this.path = path;
 		this.datetime = new Date();
+	}
+	
+	public Image(Image oldImage) {
+		this.title = oldImage.title;
+		this.path = oldImage.path;
+		this.datetime = new Date();
+		this.item = oldImage.item;
 	}
 	
 	public Long getId() {
@@ -48,12 +55,20 @@ public class Category {
 		this.id = id;
 	}
 	
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	public String getPath() {
+		return path;
+	}
+	
+	public void setPath(String path) {
+		this.path = path;
 	}
 	
     public Date getDatetime() {

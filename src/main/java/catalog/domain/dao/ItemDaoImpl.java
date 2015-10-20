@@ -1,19 +1,30 @@
-package catalog.domain;
+package catalog.domain.dao;
 
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import catalog.domain.HibernateUtil;
-import catalog.domain.Item;
+import catalog.domain.model.Item;
 
-public class ItemManager {
-	private final static Logger log = Logger.getLogger(ItemManager.class.getName());
-	private ImageManager immng = new ImageManager();
+public class ItemDaoImpl implements ItemDao {
+	private final static Logger log = Logger.getLogger(ItemDaoImpl.class.getName());
+	private ImageDao imageDao;
+	
+	public void setImageDao(ImageDao imageDao) {
+		this.imageDao = imageDao;
+	}
+	
+	private SessionFactory sessionFactory;
+	
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
 
 	public Item updateItem(Item item, Long cId, boolean update) {
 		// Input like
@@ -22,9 +33,9 @@ public class ItemManager {
 		if (item.getImage().getPath() == null)
 			item.setImage(null);
 		else
-			item.setImage(immng.updateImage(item.getImage(), update));
+			item.setImage(imageDao.updateImage(item.getImage(), update));
 
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
         // no category in json, so we need to maintain relation manually
         // We have to get image from database again to maintain chain
@@ -44,7 +55,7 @@ public class ItemManager {
 	}
 
     public Item getItem(Long id) {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
         Item item = (Item) session.get(Item.class, id);
         Hibernate.initialize(item.getImage());
@@ -53,7 +64,7 @@ public class ItemManager {
     }
 
     public void deleteItem(Long id) {
-    	Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+    	Session session = sessionFactory.getCurrentSession();
     	session.beginTransaction();
     	Item item = (Item)session.get(Item.class, id);
     	if (item != null) {
@@ -64,7 +75,7 @@ public class ItemManager {
     }
 
 	public List<Item> getItems(Long cId) {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
         @SuppressWarnings("unchecked")
 		List<Item> result = session.createCriteria(Item.class).add(Restrictions.eq("category.id", cId)).list();
@@ -78,7 +89,7 @@ public class ItemManager {
 	
 	public List<Item> getLatestItems() {
 		//Output will be limited to 12 items
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
         @SuppressWarnings("unchecked")
 		List<Item> result = session.createCriteria(Item.class)

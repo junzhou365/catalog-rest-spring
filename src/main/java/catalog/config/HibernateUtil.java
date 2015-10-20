@@ -1,4 +1,4 @@
-package catalog.domain;
+package catalog.config;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;

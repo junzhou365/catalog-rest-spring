@@ -1,24 +1,28 @@
-package catalog.domain;
+package catalog.domain.dao;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import catalog.config.WebConfigurer;
-import catalog.domain.HibernateUtil;
+import catalog.domain.model.Image;
 
-public class ImageManager {
-	private final static Logger log = Logger.getLogger(ImageManager.class.getName());
+public class ImageDaoImpl implements ImageDao {
+	private final static Logger log = Logger.getLogger(ImageDaoImpl.class.getName());
 	private final static String imageFolerPath = WebConfigurer.imageFolerPath;
+	
+	private SessionFactory sessionFactory;
+	
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
 	
     public Image updateImage(Image image, boolean update) {
     	if (image == null || image.getPath() == null) return null;
@@ -26,7 +30,7 @@ public class ImageManager {
     	String localFilename = downloadImage(image);
         if (localFilename != null)
         	image.setPath(localFilename);
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
         Image changedImage = image;
         if (update && image.getId() != null)
@@ -40,7 +44,7 @@ public class ImageManager {
     }
 
     public Image getImage(Long id) {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
         Image image = (Image) session.get(Image.class, id);
         session.getTransaction().commit();
@@ -49,7 +53,7 @@ public class ImageManager {
     
     public void deleteImage(Long id) {
     	//remove all items in the category
-    	Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+    	Session session = sessionFactory.getCurrentSession();
     	session.beginTransaction();
     	Image image = (Image) session.get(Image.class, id);
     	if (image != null) {

@@ -11,8 +11,10 @@
         <property name="current_session_context_class">thread</property>
         <property name="show_sql">true</property>
         <property name="hbm2ddl.auto">update</property>
-        <mapping class="catalog.domain.Category"/>
-        <mapping class="catalog.domain.Item"/>
-        <mapping class="catalog.domain.Image"/>
+        <mapping class="catalog.domain.model.Category"/>
+        <mapping class="catalog.domain.model.Item"/>
+        <mapping class="catalog.domain.model.Image"/>
+        <mapping class="catalog.user.model.User"/>
+        <mapping class="catalog.user.model.UserRole"/>
        </session-factory>
 </hibernate-configuration>
