@@ -28,12 +28,12 @@ public class SecurityController {
 		this.userDao = userDao;
 	}
 	
-	@RequestMapping("/user")
+	@RequestMapping("/catalog/user")
 	public Principal user(Principal user) {
 		return user;
 	}
 	
-	@RequestMapping("/signup")
+	@RequestMapping("/catalog/signup")
 	public void user(@RequestBody User user) {
 		userDao.updateUser(user, false);
 	}

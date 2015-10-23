@@ -1,6 +1,5 @@
-package catalog.controller;
+package catalog.controller.api;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -12,11 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import catalog.domain.dao.ItemDao;
-import catalog.domain.dao.ItemDaoImpl;
 import catalog.domain.model.Item;
 
 @RestController
-@RequestMapping(value="/api")
+@RequestMapping(value="/catalog/api")
 public class ItemController {
 	
 	final Logger log = Logger.getLogger(ItemController.class.getName());

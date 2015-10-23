@@ -1,4 +1,4 @@
-package catalog.controller;
+package catalog.controller.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +17,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 @RestController
-@RequestMapping(value="/api")
+@RequestMapping(value="/catalog/api")
 public class CatalogController {
 	final Logger log = Logger.getLogger(CatalogController.class.getName());
 	

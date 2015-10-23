@@ -44,10 +44,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       		.and()
 //		.formLogin().and()
         .authorizeRequests()
-    		.antMatchers("/index.html", "/logout", "/signup").permitAll()
+    		.antMatchers("/catalog/index.html", "/logout", "/signup").permitAll()
     		.antMatchers(HttpMethod.GET, "/**").permitAll()
     		.antMatchers("/user").authenticated()
-    		.anyRequest().authenticated().and().logout().logoutSuccessUrl("/").and()
+    		.anyRequest().authenticated().and().logout().logoutSuccessUrl("/catalog").and()
     		.csrf()
 //    		.disable();
     		.csrfTokenRepository(csrfTokenRepository()).and()
