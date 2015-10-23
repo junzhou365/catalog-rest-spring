@@ -26,6 +26,8 @@ public class WebConfigurer extends WebMvcConfigurerAdapter{
 	
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
-	    registry.addViewController("/catalog/").setViewName("forward:/catalog/index.html");
+		registry.addViewController("/catalog/").setViewName("forward:/catalog/index.html");
+	    registry.addRedirectViewController("/catalog", "/catalog/");
+	    
 	}
 }
