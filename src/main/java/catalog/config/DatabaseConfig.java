@@ -20,7 +20,7 @@ public class DatabaseConfig {
     public SessionFactory sessionFactory() {
 		System.out.println("\n");
 		System.out.println("Create sessionFactory");
-		SessionFactory factory = new org.hibernate.cfg.Configuration().configure().buildSessionFactory();
+		SessionFactory factory = HibernateUtil.getSessionFactory();
 		System.out.println("Factory exists: ");
 		System.out.println(factory != null);
 		return factory;
