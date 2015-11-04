@@ -4,15 +4,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
+import catalog.user.model.User;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
@@ -31,7 +25,12 @@ public class Category {
 	
 	@OneToMany(mappedBy="category")
 	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
+	// no need to manually store items since cascade
 	private Set<Item> items = new HashSet<Item>(0);
+
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="USER_ID")
+	private User user;
 	
 	public Category() {}
 	
@@ -63,4 +62,8 @@ public class Category {
     public void setDatetime(Date datetime) {
     	this.datetime = datetime;
     }
+
+	public User getUser() { return user;}
+
+	public void setUser(User user) { this.user = user;}
 }

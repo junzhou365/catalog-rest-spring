@@ -4,21 +4,14 @@ import java.security.Principal;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import catalog.user.dao.UserDao;
 import catalog.user.model.User;
 
 @RestController
+@RequestMapping(value="/catalog")
 public class SecurityController {
 	final Logger log = Logger.getLogger(SecurityController.class.getName());
 	
@@ -28,13 +21,16 @@ public class SecurityController {
 		this.userDao = userDao;
 	}
 	
-	@RequestMapping("/catalog/user")
+	@RequestMapping("/user")
+//	@ResponseBody
 	public Principal user(Principal user) {
 		return user;
 	}
 	
-	@RequestMapping("/catalog/signup")
+	@RequestMapping(value="/signup", method=RequestMethod.POST)
+//	public void user(@RequestParam("username") String username, @RequestParam("password") String password) {
 	public void user(@RequestBody User user) {
+//		User user = new User(username, password, true);
 		userDao.updateUser(user, false);
 	}
 }

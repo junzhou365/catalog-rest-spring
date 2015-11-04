@@ -40,13 +40,13 @@ public class ItemController {
 	
 	@RequestMapping(value="/categories/{cId}/items", method=RequestMethod.POST)
 	public Item createItem(@RequestBody Item item, @PathVariable Long cId) {
-		Item createdItem = itemDao.updateItem(item, cId, false);
+		Item createdItem = itemDao.createItem(item, cId);
 		return createdItem;
 	}
 	
 	@RequestMapping(value="/categories/{cId}/items/{iId}", method=RequestMethod.PUT)
 	public Item updateItem(@RequestBody Item item, @PathVariable Long cId) {
-		Item updatedItem = itemDao.updateItem(item, cId, true);
+		Item updatedItem = itemDao.updateItem(item, cId);
 		return updatedItem;
 	}
 	

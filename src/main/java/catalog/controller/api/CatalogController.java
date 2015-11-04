@@ -8,10 +8,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import catalog.domain.dao.CategoryDao;
-import catalog.domain.dao.CategoryDaoImpl;
 import catalog.domain.model.Category;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;

@@ -1,11 +1,16 @@
 package catalog.user.model;
 
+import catalog.domain.model.Category;
+import catalog.domain.model.Item;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -16,12 +21,26 @@ public class User {
 	@Id
 	@Column(name = "username", unique = true, nullable = false, length = 45)
 	private String username;
+
 	@Column(name = "password", nullable = false, length = 60)
+//	@JsonIgnore
 	private String password;
+
 	@Column(name = "enabled", nullable = false)
+//	@JsonIgnore
 	private boolean enabled;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+
+	@OneToMany(mappedBy = "user")w
+	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
 	private Set<UserRole> userRole = new HashSet<UserRole>(0);
+
+	@OneToMany(mappedBy = "user")
+	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
+	private Set<Category> categories = new HashSet<Category>(0);
+
+	@OneToMany(mappedBy = "user")
+	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
+	private Set<Item> items = new HashSet<Item>(0);
 
 	public User() {
 	}
@@ -75,4 +94,19 @@ public class User {
 		this.userRole = userRole;
 	}
 
+	public Set<Category> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(Set<Category> categories) {
+		this.categories = categories;
+	}
+
+	public Set<Item> getItems() {
+		return items;
+	}
+
+	public void setItems(Set<Item> items) {
+		this.items = items;
+	}
 }

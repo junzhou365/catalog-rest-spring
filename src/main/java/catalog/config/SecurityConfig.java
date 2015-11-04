@@ -40,14 +40,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {		
 		http
-      	.httpBasic()
-      		.and()
+      	.httpBasic().and()
 //		.formLogin().and()
         .authorizeRequests()
-    		.antMatchers("/catalog/index.html", "/logout", "/signup").permitAll()
+    		.antMatchers(WebConfigurer.CATALOG_URL + "index.html", WebConfigurer.CATALOG_URL + "/logout",
+					WebConfigurer.CATALOG_URL + "/signup").permitAll()
     		.antMatchers(HttpMethod.GET, "/**").permitAll()
-    		.antMatchers("/user").authenticated()
-    		.anyRequest().authenticated().and().logout().logoutSuccessUrl("/catalog").and()
+    		.antMatchers(WebConfigurer.CATALOG_URL + "/user").authenticated()
+    		.anyRequest().authenticated().and().logout().logoutSuccessUrl(WebConfigurer.CATALOG_URL).and()
     		.csrf()
 //    		.disable();
     		.csrfTokenRepository(csrfTokenRepository()).and()

@@ -3,50 +3,66 @@ package catalog.domain.dao;
 import java.util.Date;
 import java.util.List;
 
+import catalog.user.dao.UserDao;
+import catalog.user.model.User;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+
 
 import catalog.domain.model.Category;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public class CategoryDaoImpl implements CategoryDao {	
 	private final static Logger log = Logger.getLogger(CategoryDaoImpl.class.getName());
 	
 	private SessionFactory sessionFactory;
-	
+	private UserDao userDao;
+
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
+	public void setUserDao(UserDao userDao) {
+		this.userDao = userDao;
+	}
 	
     public Category getCategory(Long id) {
-    	log.debug(sessionFactory);
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
         Category category = (Category) session.get(Category.class, id);
         session.getTransaction().commit();
         return category;
     }
-    
+
     public Category updateCategory(Category category, boolean update) {
-    	category.setDatetime(new Date());
-        Session session = sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        if (update)
-        	session.update(category);
-        else
-        	session.save(category);
-        session.getTransaction().commit();
+		User currUser = getCurrentUser();
+
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		if (update && isTheAuthor(category)) {
+			category.setDatetime(new Date());
+			session.update(category);
+		}
+		// create
+		else if(!update) {
+			category.setDatetime(new Date());
+			category.setUser(currUser);
+//			Hibernate.initialize(category.getUser());
+//			Hibernate.initialize(category.getUser().getUserRole());
+			session.save(category);
+		}
+		session.getTransaction().commit();
+
         return category;
     }
-    
+
     public void deleteCategory(Long id) {
-    	//remove all items in the category using cascade
+    	// remove all items in the category using cascade
     	Session session = sessionFactory.getCurrentSession();
     	session.beginTransaction();
     	Category category = (Category)session.get(Category.class, id);
-    	if (category != null) {
+    	if (category != null && isTheAuthor(category)) {
     		session.delete(category);
     		session.flush();
     	}
@@ -63,18 +79,24 @@ public class CategoryDaoImpl implements CategoryDao {
     }
 	
 	public void init() {
-		System.out.println("\n");
-		System.out.println("*************** CategoryDaoImpl is created! ***************");
-		System.out.println("\n");
-		
-		System.out.println("CategoryDao Factory exists: ");
-		System.out.println(sessionFactory.getCurrentSession() != null);
-		System.out.println("\n");
 	}
 	
 	public void shutdown() {
-		System.out.println("\n");
-		System.out.println("*************** CategoryDaoImpl is shutting down! ***************");
-		System.out.println("\n");
+	}
+
+	private boolean isTheAuthor(Category category) {
+		Object user = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return user instanceof UserDetails
+				&&  category.getUser() != null
+				&& ((UserDetails) user).getUsername().equals(category.getUser().getUsername());
+	}
+
+	private User getCurrentUser() {
+		// This will close session if it is used inside transaction
+		Object user = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (user instanceof UserDetails) {
+			return userDao.findByUserName(((UserDetails) user).getUsername());
+		}
+		return userDao.findByUserName(user.toString());
 	}
 }

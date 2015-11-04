@@ -5,7 +5,9 @@ import java.util.List;
 import catalog.domain.model.Item;
 
 public interface ItemDao {
-	public Item updateItem(Item item, Long cId, boolean update);
+	public Item updateItem(Item item, Long cId);
+
+	public Item createItem(Item item, Long cId);
 
     public Item getItem(Long id);
 

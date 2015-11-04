@@ -15,9 +15,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import catalog.user.model.User;
 import org.hibernate.annotations.GenericGenerator;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name="ITEMS")
@@ -43,6 +45,10 @@ public class Item {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date datetime;
+
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="USER_ID")
+	private User user;
 
 	public Item() {}
 
@@ -106,5 +112,20 @@ public class Item {
 
 	public void setDatetime(Date datetime) {
 		this.datetime = datetime;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public boolean isTheAuthor() {
+		Object user = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return user instanceof UserDetails
+				&&  this.user != null
+				&& ((UserDetails) user).getUsername().equals(this.user.getUsername());
 	}
 }

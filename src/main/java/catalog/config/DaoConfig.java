@@ -8,7 +8,6 @@ import catalog.user.dao.UserDao;
 import catalog.user.dao.UserDaoImpl;
 import catalog.user.dao.UserRoleDao;
 import catalog.user.dao.UserRoleDaoImpl;
-import catalog.App;
 import catalog.domain.dao.CategoryDao;
 import catalog.domain.dao.CategoryDaoImpl;
 import catalog.domain.dao.ImageDao;
@@ -47,6 +46,7 @@ public class DaoConfig {
 	public CategoryDao categoryDao() {
 		CategoryDaoImpl categoryDaoImpl = new CategoryDaoImpl();
 		categoryDaoImpl.setSessionFactory(databaseConfig.sessionFactory());
+		categoryDaoImpl.setUserDao(userDao());
 		return categoryDaoImpl;
 		
 	}

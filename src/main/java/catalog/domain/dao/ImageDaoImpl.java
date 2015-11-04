@@ -1,5 +1,6 @@
 package catalog.domain.dao;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,7 +10,6 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import catalog.config.WebConfigurer;
 import catalog.domain.model.Image;
@@ -33,9 +33,9 @@ public class ImageDaoImpl implements ImageDao {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
         Image changedImage = image;
-        if (update && image.getId() != null)
-        	session.update(changedImage);
-        else {
+        if (update && image.getId() != null) {
+            session.update(changedImage);
+        } else {
         	changedImage = new Image(image);
         	session.save(changedImage);
         }
@@ -110,5 +110,27 @@ public class ImageDaoImpl implements ImageDao {
                 }
             }
         }
+    }
+
+    private void renameFile(String oldName, String newName) {
+        File file = new File(oldName);
+        File newlyFile = new File(newName);
+        boolean success = file.renameTo(newlyFile);
+        if (!success)
+            System.out.println("Rename failed!");
+    }
+
+    private void deleteFile() {
+        // TODO finish deleteFile
+//        try {
+//            Files.delete(path);
+//        } catch (NoSuchFileException x) {
+//            System.err.format("%s: no such" + " file or directory%n", path);
+//        } catch (DirectoryNotEmptyException x) {
+//            System.err.format("%s not empty%n", path);
+//        } catch (IOException x) {
+//            // File permission problems are caught here.
+//            System.err.println(x);
+//        }
     }
 }

@@ -39,7 +39,7 @@ public class UserRole{
 		this.userRoleId = userRoleId;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "username", nullable = false)
 	public User getUser() {
 		return this.user;

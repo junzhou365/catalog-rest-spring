@@ -8,7 +8,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import catalog.domain.model.Item;
 
@@ -26,32 +25,41 @@ public class ItemDaoImpl implements ItemDao {
 		this.sessionFactory = sessionFactory;
 	}
 
-	public Item updateItem(Item item, Long cId, boolean update) {
-		// Input like
-		// {image: Object, title: "asdf", text: "asdf"}$promise: undefined$resolved: truedatetime: nullid: nullimage: Objecttext: "asdf"title: "asdf"__proto__: Resource
-
+	public Item updateItem(Item item, Long cId) {
+		if (!item.isTheAuthor())
+			return item;
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		// no category in json, so we need to maintain relation manually
+		// We have to get image from database again to maintain chain
 		if (item.getImage().getPath() == null)
 			item.setImage(null);
 		else
-			item.setImage(imageDao.updateImage(item.getImage(), update));
+			item.setImage(imageDao.updateImage(item.getImage(), true)); // image update
+		Hibernate.initialize(item.getCategory());
+		if (item.getImage() != null)
+			item.getImage().getId();
+		session.update(item);
+		session.getTransaction().commit();
+		return item;
+	}
 
-        Session session = sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        // no category in json, so we need to maintain relation manually
-        // We have to get image from database again to maintain chain
-        Hibernate.initialize(item.getCategory());
-        if (item.getImage() != null)
-        	item.getImage().getId();
-        Item changedItem = item;
-
-        if (update)
-        	session.update(changedItem);
-        else {
-        	changedItem = new Item(item);
-        	session.save(changedItem);
-        }
-        session.getTransaction().commit();
-        return changedItem;
+	public Item createItem(Item item, Long cId) {
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		// no category in json, so we need to maintain relation manually
+		// We have to get image from database again to maintain chain
+		if (item.getImage().getPath() == null)
+			item.setImage(null);
+		else
+			item.setImage(imageDao.updateImage(item.getImage(), false)); // image creation
+		Hibernate.initialize(item.getCategory());
+		if (item.getImage() != null)
+			item.getImage().getId();
+		Item changedItem = new Item(item);
+		session.save(changedItem);
+		session.getTransaction().commit();
+		return changedItem;
 	}
 
     public Item getItem(Long id) {

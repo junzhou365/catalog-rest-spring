@@ -15,6 +15,7 @@ public class WebConfigurer extends WebMvcConfigurerAdapter{
 //	public final static String imageFolerPath = "/vagrant/Projects/public_images/";
 //	public final static String imageResourcePath = "file:///vagrant/Projects/public_images/";
 //	public final static String ANGULARJS_LOCATION = "file:///vagrant/Projects/webapp_catalog/app/";
+	public final static String CATALOG_URL = "/catalog";
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
