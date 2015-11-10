@@ -14,7 +14,7 @@ public class WebConfigurer extends WebMvcConfigurerAdapter{
 	public final static String imageResourcePath = "file:///home/vagrant/public_images/";
 	public final static String SHAREDRESOURCES = "file:///home/vagrant/shared_resources/";
 	public final static String CATALOG_ANGULARJS_LOCATION = "file:///home/vagrant/webapp_catalog/app/";
-	public final static String LIANPAGE_ANGULARJS_LOCATION = "file:///C:/Users/Julian/Codes/Projects/lianpage/app/";
+	public final static String LIANPAGE_ANGULARJS_LOCATION = "file:///home/vagrant/lianpage/app/";
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
