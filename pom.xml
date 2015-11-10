@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>julian</groupId>
-	<artifactId>catalog</artifactId>
+	<artifactId>junzhou365</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>catalog</name>
+	<name>junzhou365</name>
 	<description>Demo project for Spring Boot</description>
 
 	<parent>

@@ -1,0 +1,17 @@
+{
+  "name": "shared-resources",
+  "description": "A lot of JS files",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "angular": "~1.4.7",
+    "angular-route": "~1.4.7",
+    "angular-resource": "~1.4.7",
+    "angular-ui-router": "~0.2.15",
+    "angular-bootstrap": "~0.13.4",
+    "bootstrap": "~3.3.5",
+    "less": "~2.5.3",
+    "velocity": "1.2.3"
+  }
+}
