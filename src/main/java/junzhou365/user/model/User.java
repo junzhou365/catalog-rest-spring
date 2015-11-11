@@ -1,5 +1,6 @@
 package junzhou365.user.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import junzhou365.domain.model.Category;
 import junzhou365.domain.model.Item;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -23,11 +24,9 @@ public class User {
 	private String username;
 
 	@Column(name = "password", nullable = false, length = 60)
-//	@JsonIgnore
 	private String password;
 
 	@Column(name = "enabled", nullable = false)
-//	@JsonIgnore
 	private boolean enabled;
 
 	@OneToMany(mappedBy = "user")
@@ -36,10 +35,12 @@ public class User {
 
 	@OneToMany(mappedBy = "user")
 	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
+	@JsonIgnore
 	private Set<Category> categories = new HashSet<Category>(0);
 
 	@OneToMany(mappedBy = "user")
 	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
+	@JsonIgnore
 	private Set<Item> items = new HashSet<Item>(0);
 
 	public User() {
@@ -67,16 +68,15 @@ public class User {
 		this.username = username;
 	}
 
-	
+	@JsonIgnore
 	public String getPassword() {
 		return this.password;
 	}
-
+	@JsonProperty
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
-	
 	public boolean isEnabled() {
 		return this.enabled;
 	}
@@ -85,11 +85,11 @@ public class User {
 		this.enabled = enabled;
 	}
 
-	
+	@JsonIgnore
 	public Set<UserRole> getUserRole() {
 		return this.userRole;
 	}
-
+	@JsonProperty
 	public void setUserRole(Set<UserRole> userRole) {
 		this.userRole = userRole;
 	}

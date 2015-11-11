@@ -24,30 +24,37 @@ public class DaoConfig {
 	
 	@Autowired
 	private SecurityConfig securityConfig;
+
+	@Autowired
+	private ServiceConfig serviceConfig;
 	
 	@Bean
 	public UserDao userDao() {
+		System.out.println("USERDAO START");
 		UserDaoImpl userDaoImpl = new UserDaoImpl();
 		userDaoImpl.setSessionFactory(databaseConfig.sessionFactory());
 		userDaoImpl.setUserRoleDao(userRoleDao());
 		userDaoImpl.setPasswordEncoder(securityConfig.passwordEncoder());
+		System.out.println("USERDAO EMD");
 		return userDaoImpl;
 		
 	}
 	
 	@Bean
 	public UserRoleDao userRoleDao() {
+		System.out.println("USEROLEDAO START");
 		UserRoleDaoImpl userRoleDaoImpl = new UserRoleDaoImpl();
 		userRoleDaoImpl.setSessionFactory(databaseConfig.sessionFactory());
+		System.out.println("USEROLEDAO END");
 		return userRoleDaoImpl;
 		
 	}
 	
-	@Bean(initMethod="init", destroyMethod = "shutdown")
+	@Bean
 	public CategoryDao categoryDao() {
 		CategoryDaoImpl categoryDaoImpl = new CategoryDaoImpl();
 		categoryDaoImpl.setSessionFactory(databaseConfig.sessionFactory());
-		categoryDaoImpl.setUserDao(userDao());
+		categoryDaoImpl.setMyUserDetailsService(serviceConfig.myUserDetailsService());
 		return categoryDaoImpl;
 		
 	}

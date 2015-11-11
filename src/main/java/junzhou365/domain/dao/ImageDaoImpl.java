@@ -11,12 +11,12 @@ import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import junzhou365.config.WebConfigurer;
+import junzhou365.config.WebConfig;
 import junzhou365.domain.model.Image;
 
 public class ImageDaoImpl implements ImageDao {
 	private final static Logger log = Logger.getLogger(ImageDaoImpl.class.getName());
-	private final static String imageFolerPath = WebConfigurer.imageFolerPath;
+	private final static String imageFolerPath = WebConfig.imageFolerPath;
 	
 	private SessionFactory sessionFactory;
 	

@@ -8,6 +8,8 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,8 +20,8 @@ import junzhou365.user.dao.UserDao;
 import junzhou365.user.model.UserRole;
 
 
-public class UserDetailsServiceImpl implements UserDetailsService {
-	final Logger log = Logger.getLogger(UserDetailsServiceImpl.class.getName());
+public class MyUserDetailsServiceImpl implements MyUserDetailsService {
+	final Logger log = Logger.getLogger(MyUserDetailsServiceImpl.class.getName());
 	
 	private UserDao userDao;
 	
@@ -61,6 +63,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		List<GrantedAuthority> Result = new ArrayList<GrantedAuthority>(setAuths);
 
 		return Result;
+	}
+
+	public junzhou365.user.model.User getCurrentUser() {
+		// This will close session if it is used inside transaction
+		SecurityContext sctx = SecurityContextHolder.getContext();
+		if (sctx.getAuthentication() == null)
+			return null;
+		Object user = sctx.getAuthentication().getPrincipal();
+		if (user instanceof UserDetails) {
+			return userDao.findByUserName(((UserDetails) user).getUsername());
+		}
+		return userDao.findByUserName(user.toString());
 	}
 
 }

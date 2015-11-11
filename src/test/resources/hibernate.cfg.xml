@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<!DOCTYPE hibernate-configuration SYSTEM "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/catalog2</property>
+        <property name="connection.driver_class">org.postgresql.Driver</property>
+        <property name="connection.username">julian</property>
+        <property name="connection.password">juls</property>
+        <property name="connection.pool_size">1</property>
+        <property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+        <property name="current_session_context_class">thread</property>
+        <property name="show_sql">true</property>
+        <property name="hbm2ddl.auto">update</property>
+        <mapping class="junzhou365.domain.model.Category"/>
+        <mapping class="junzhou365.domain.model.Item"/>
+        <mapping class="junzhou365.domain.model.Image"/>
+        <mapping class="junzhou365.user.model.User"/>
+        <mapping class="junzhou365.user.model.UserRole"/>
+       </session-factory>
+</hibernate-configuration>

@@ -34,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(serviceConfig.userDetailsService()).passwordEncoder(passwordEncoder());
+		auth.userDetailsService(serviceConfig.myUserDetailsService()).passwordEncoder(passwordEncoder());
 	}
 	
 	@Override
@@ -43,11 +43,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       	.httpBasic().and()
 //		.formLogin().and()
         .authorizeRequests()
-    		.antMatchers("/logout", "/signup").permitAll()
+    		.antMatchers(WebConfig.CATALOG_URL + "/logout", WebConfig.CATALOG_URL + "/signup").permitAll()
     		.antMatchers(HttpMethod.GET, "/**").permitAll()
-    		.antMatchers("/catalog/user").authenticated()
-    		.anyRequest().authenticated().and().logout().logoutSuccessUrl("/catalog").and()
-    		.csrf()
+    		.antMatchers(WebConfig.CATALOG_URL + "/user").authenticated()
+    		.anyRequest().authenticated().and().logout().logoutSuccessUrl(WebConfig.CATALOG_URL).and()
+			.csrf()
 //    		.disable();
     		.csrfTokenRepository(csrfTokenRepository()).and()
 			.addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);

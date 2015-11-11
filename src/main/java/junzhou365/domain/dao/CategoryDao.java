@@ -12,8 +12,4 @@ public interface CategoryDao {
     public void deleteCategory(Long id);
 
 	public List<Category> getAllCategories();
-	
-	public void init();
-	
-	public void shutdown();
 }

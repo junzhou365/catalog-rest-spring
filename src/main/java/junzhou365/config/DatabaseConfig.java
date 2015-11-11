@@ -14,7 +14,7 @@ public class DatabaseConfig {
     public SessionFactory sessionFactory() {
 		System.out.println("\n");
 		System.out.println("Create sessionFactory");
-		SessionFactory factory = HibernateUtil.getSessionFactory();
+		SessionFactory factory = HibernateUtilConfig.getSessionFactory();
 		System.out.println("Factory exists: ");
 		System.out.println(factory != null);
 		return factory;

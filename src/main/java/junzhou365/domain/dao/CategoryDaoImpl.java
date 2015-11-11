@@ -3,30 +3,32 @@ package junzhou365.domain.dao;
 import java.util.Date;
 import java.util.List;
 
-import junzhou365.user.dao.UserDao;
 import junzhou365.user.model.User;
+import junzhou365.user.service.MyUserDetailsService;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import junzhou365.domain.model.Category;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 
 public class CategoryDaoImpl implements CategoryDao {	
 	private final static Logger log = Logger.getLogger(CategoryDaoImpl.class.getName());
 	
 	private SessionFactory sessionFactory;
-	private UserDao userDao;
-
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
-	public void setUserDao(UserDao userDao) {
-		this.userDao = userDao;
+
+	private MyUserDetailsService myUserDetailsService;
+
+	public void setMyUserDetailsService(MyUserDetailsService myUserDetailsService) {
+		this.myUserDetailsService = myUserDetailsService;
 	}
-	
-    public Category getCategory(Long id) {
+
+	public Category getCategory(Long id) {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
         Category category = (Category) session.get(Category.class, id);
@@ -35,7 +37,7 @@ public class CategoryDaoImpl implements CategoryDao {
     }
 
     public Category updateCategory(Category category, boolean update) {
-		User currUser = getCurrentUser();
+		User currUser = myUserDetailsService.getCurrentUser();
 
 		Session session = sessionFactory.getCurrentSession();
 		session.beginTransaction();
@@ -44,7 +46,7 @@ public class CategoryDaoImpl implements CategoryDao {
 			session.update(category);
 		}
 		// create
-		else if(!update) {
+		else if(!update && currUser != null) {
 			category.setDatetime(new Date());
 			category.setUser(currUser);
 //			Hibernate.initialize(category.getUser());
@@ -76,26 +78,11 @@ public class CategoryDaoImpl implements CategoryDao {
         session.getTransaction().commit();
         return result;
     }
-	
-	public void init() {
-	}
-	
-	public void shutdown() {
-	}
 
 	private boolean isTheAuthor(Category category) {
 		Object user = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return user instanceof UserDetails
 				&&  category.getUser() != null
 				&& ((UserDetails) user).getUsername().equals(category.getUser().getUsername());
-	}
-
-	private User getCurrentUser() {
-		// This will close session if it is used inside transaction
-		Object user = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (user instanceof UserDetails) {
-			return userDao.findByUserName(((UserDetails) user).getUsername());
-		}
-		return userDao.findByUserName(user.toString());
 	}
 }

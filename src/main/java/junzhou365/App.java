@@ -9,10 +9,12 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Arrays;
 
 import org.apache.log4j.Logger;
+import org.springframework.context.annotation.FilterType;
 
 @Configuration
+//@ComponentScan
 @EnableAutoConfiguration
-@ComponentScan({ "junzhou365.*" })
+@ComponentScan(basePackages ="junzhou365", includeFilters = @ComponentScan.Filter(type = FilterType.REGEX, pattern = ".*Config") )
 public class App {
 	private final static Logger log = Logger.getLogger(App.class.getName());
 	
@@ -26,5 +28,6 @@ public class App {
         for (String beanName : beanNames) {
             System.out.println(beanName);
         }
+//        SpringApplication.run(App.class, args);
     }
 }
