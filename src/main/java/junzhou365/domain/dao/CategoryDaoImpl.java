@@ -28,6 +28,12 @@ public class CategoryDaoImpl implements CategoryDao {
 		this.myUserDetailsService = myUserDetailsService;
 	}
 
+	public CategoryDaoImpl() {}
+
+	public CategoryDaoImpl(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
 	public Category getCategory(Long id) {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
