@@ -15,14 +15,17 @@ public class WebConfig extends WebMvcConfigurerAdapter{
 	public final static String SHAREDRESOURCES = "C:/Users/Julian/Codes/Projects/shared-resources/";
 	public final static String CATALOG_ANGULARJS_LOCATION = "file:///C:/Users/Julian/Codes/Projects/webapp_catalog/app/";
 	public final static String LIANPAGE_ANGULARJS_LOCATION = "file:///C:/Users/Julian/Codes/Projects/lianpage/app/";
+	public final static String FROGGER_LOCATION = "file:///C:/Users/Julian/Codes/Projects/frogger/";
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
 		registry.addResourceHandler("/vendor/**").addResourceLocations(SHAREDRESOURCES);
-		registry.addResourceHandler("/**").addResourceLocations(LIANPAGE_ANGULARJS_LOCATION);
 		registry.addResourceHandler(CATALOG_URL + "/**").addResourceLocations(CATALOG_ANGULARJS_LOCATION);
 		registry.addResourceHandler(CATALOG_URL + "/images/**").addResourceLocations(imageResourcePath);
+		registry.addResourceHandler("/frogger/**").addResourceLocations(FROGGER_LOCATION);
+		registry.addResourceHandler("/**").addResourceLocations(LIANPAGE_ANGULARJS_LOCATION);
+
 	}
 	
 	@Override
@@ -30,6 +33,8 @@ public class WebConfig extends WebMvcConfigurerAdapter{
 		registry.addViewController("/").setViewName("forward:/index.html");
 		registry.addViewController(CATALOG_URL + "/").setViewName("forward:" + CATALOG_URL + "/index.html");
 	    registry.addRedirectViewController(CATALOG_URL, CATALOG_URL + "/");
-	    
+		registry.addViewController("/frogger/").setViewName("forward:/frogger/index.html");
+		registry.addRedirectViewController("/frogger", "/frogger/");
+
 	}
 }
