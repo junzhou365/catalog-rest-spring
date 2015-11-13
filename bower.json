@@ -12,6 +12,10 @@
     "angular-bootstrap": "~0.13.4",
     "bootstrap": "~3.3.5",
     "less": "~2.5.3",
-    "velocity": "1.2.3"
+    "velocity": "1.2.3",
+    "scrollreveal": "scrollReveal.js#~2.3.2",
+    "masonry": "~3.3.2",
+    "imagesloaded": "~3.2.0",
+    "ihover": "~1.0.0"
   }
 }
